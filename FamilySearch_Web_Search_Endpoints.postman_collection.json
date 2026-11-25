@@ -1,0 +1,561 @@
+{
+  "info": {
+    "name": "FamilySearch Web Search Endpoints",
+    "description": "The JSON endpoints behind the FamilySearch website (Full-Text, Records, Tree, Catalog, Images) as used in research sessions, November 2026. Not the documented developer API (see FamilySearch-API-Postman). Requires a signed-in session: copy the value of the fssessionid cookie into {{fs_session}}. Read only. Personal research use; follow FamilySearch terms.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Full-Text search (live-tested)",
+      "item": [
+        {
+          "name": "Full-text search by place",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/service/search/fulltext/search?count=100&offset=0&m.defaultFacets=on&m.queryRequireDefault=on&q.text={{text}}&q.anyPlace={{place}}",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "service",
+                "search",
+                "fulltext",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "count",
+                  "value": "100"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "m.defaultFacets",
+                  "value": "on"
+                },
+                {
+                  "key": "m.queryRequireDefault",
+                  "value": "on"
+                },
+                {
+                  "key": "q.text",
+                  "value": "{{text}}"
+                },
+                {
+                  "key": "q.anyPlace",
+                  "value": "{{place}}"
+                }
+              ]
+            },
+            "description": "q.text accepts quoted phrases (\"Bledsoe Holder\"). q.anyPlace e.g. \"Jackson, Alabama, United States\". Each entry: content.recordDate, recordType, recordPlace, textDocument (full OCR text), entities, image id 3:1:..."
+          }
+        }
+      ],
+      "description": "OCR text of deeds, court, probate, land and other unindexed record images."
+    },
+    {
+      "name": "Historical records (live-tested)",
+      "item": [
+        {
+          "name": "Records search (personas)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/service/search/hr/v2/personas?count=100&offset=0&q.givenName={{given}}&q.surname={{surname}}&f.collectionId={{collection_id}}",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "service",
+                "search",
+                "hr",
+                "v2",
+                "personas"
+              ],
+              "query": [
+                {
+                  "key": "count",
+                  "value": "100"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "q.givenName",
+                  "value": "{{given}}"
+                },
+                {
+                  "key": "q.surname",
+                  "value": "{{surname}}"
+                },
+                {
+                  "key": "f.collectionId",
+                  "value": "{{collection_id}}"
+                }
+              ]
+            },
+            "description": "Optional: q.birthLikeDate.from/to, q.residencePlace, q.spouseGivenName, q.anyPlace. Collection ids used: 1803959 (1790), 1804228 (1800), 1803765 (1810), 1803955 (1820), 1786457 (1840), 1401638 (1850), 1473181 (1860), 1417683 (1880), 1325221 (1900), 2221801 (Find a Grave index), 1417475 (Revolutionary War pension files)."
+          }
+        },
+        {
+          "name": "Record persona (household, fields)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/x-gedcomx-v1+json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/platform/records/personas/{{persona_id}}",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "platform",
+                "records",
+                "personas",
+                "{{persona_id}}"
+              ]
+            },
+            "description": "persona_id like MDZJ-8HQ. Returns persons (household), fields (ages, birthplaces, parents' birthplaces), and the image ark (3:1:...) in source descriptions."
+          }
+        }
+      ],
+      "description": "Indexed records search and persona detail."
+    },
+    {
+      "name": "Family Tree (read only, live-tested)",
+      "item": [
+        {
+          "name": "Tree search",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/service/search/tree/v2/personas?count=20&q.givenName={{given}}&q.surname={{surname}}&q.birthLikeDate.from={{from}}&q.birthLikeDate.to={{to}}",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "service",
+                "search",
+                "tree",
+                "v2",
+                "personas"
+              ],
+              "query": [
+                {
+                  "key": "count",
+                  "value": "20"
+                },
+                {
+                  "key": "q.givenName",
+                  "value": "{{given}}"
+                },
+                {
+                  "key": "q.surname",
+                  "value": "{{surname}}"
+                },
+                {
+                  "key": "q.birthLikeDate.from",
+                  "value": "{{from}}"
+                },
+                {
+                  "key": "q.birthLikeDate.to",
+                  "value": "{{to}}"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Person",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/x-fs-v1+json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/platform/tree/persons/{{pid}}",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "platform",
+                "tree",
+                "persons",
+                "{{pid}}"
+              ]
+            },
+            "description": "display: name, lifespan, birth/death date and place."
+          }
+        },
+        {
+          "name": "Person families",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/x-fs-v1+json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/platform/tree/persons/{{pid}}/families",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "platform",
+                "tree",
+                "persons",
+                "{{pid}}",
+                "families"
+              ]
+            },
+            "description": "Parents, spouses, children with lifespans."
+          }
+        },
+        {
+          "name": "Person sources",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/x-fs-v1+json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/platform/tree/persons/{{pid}}/sources",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "platform",
+                "tree",
+                "persons",
+                "{{pid}}",
+                "sources"
+              ]
+            },
+            "description": "Attached sources with titles and record arks."
+          }
+        }
+      ],
+      "description": "Read the shared tree; never edit."
+    },
+    {
+      "name": "Catalog (live-tested)",
+      "item": [
+        {
+          "name": "Catalog search by place",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/service/search/catalog/v3/search?count=100&offset=0&m.queryRequireDefault=on&q.place={{catalog_place}}&q.place.exact=on&q.keywords={{keywords}}",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "service",
+                "search",
+                "catalog",
+                "v3",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "count",
+                  "value": "100"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "m.queryRequireDefault",
+                  "value": "on"
+                },
+                {
+                  "key": "q.place",
+                  "value": "{{catalog_place}}"
+                },
+                {
+                  "key": "q.place.exact",
+                  "value": "on"
+                },
+                {
+                  "key": "q.keywords",
+                  "value": "{{keywords}}"
+                }
+              ]
+            },
+            "description": "q.place e.g. \"United States, Alabama, Jackson\". Returns titles and catalog ids; the catalog page /search/catalog/{id} lists films and DGS image groups."
+          }
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Images (live-tested)",
+      "item": [
+        {
+          "name": "Full image (JPEG)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://www.familysearch.org/service/records/storage/deepzoomcloud/dz/v1/{{image_ark}}/dist.jpg",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "service",
+                "records",
+                "storage",
+                "deepzoomcloud",
+                "dz",
+                "v1",
+                "{{image_ark}}",
+                "dist.jpg"
+              ]
+            },
+            "description": "image_ark like 3:1:3Q9M-CSSC-D9XN-8. Same-origin with a signed-in session."
+          }
+        },
+        {
+          "name": "Image data (film number, links)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/search/filmdatainfo/image-data",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "search",
+                "filmdatainfo",
+                "image-data"
+              ]
+            },
+            "description": "Returns dgsNum and links (image-parents gives the image number inside the film).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"type\": \"image-data\",\n \"args\": {\n  \"imageURL\": \"https://www.familysearch.org/ark:/61903/{{image_ark}}\",\n  \"state\": {},\n  \"locale\": \"en\"\n }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Image parents (film and image number)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{fs_session}}"
+              }
+            ],
+            "url": {
+              "raw": "https://www.familysearch.org/service/records/storage/dascloud/das/v2/{{apid}}/parents",
+              "protocol": "https",
+              "host": [
+                "www",
+                "familysearch",
+                "org"
+              ],
+              "path": [
+                "service",
+                "records",
+                "storage",
+                "dascloud",
+                "das",
+                "v2",
+                "{{apid}}",
+                "parents"
+              ]
+            },
+            "description": "apid (TH-...) from image-data links. Returns e.g. childName 007820616_00677 = film 7820616, image 677. The /children listing is blocked by FamilySearch security - do not automate it."
+          }
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "variable": [
+    {
+      "key": "fs_session",
+      "value": "PASTE-fssessionid-COOKIE"
+    },
+    {
+      "key": "text",
+      "value": "\"Bledsoe Holder\""
+    },
+    {
+      "key": "place",
+      "value": "Jackson, Alabama, United States"
+    },
+    {
+      "key": "given",
+      "value": "Bledsoe"
+    },
+    {
+      "key": "surname",
+      "value": "Holder"
+    },
+    {
+      "key": "collection_id",
+      "value": "1786457"
+    },
+    {
+      "key": "persona_id",
+      "value": "MDZJ-8HQ"
+    },
+    {
+      "key": "pid",
+      "value": "LHP2-N91"
+    },
+    {
+      "key": "from",
+      "value": "1780"
+    },
+    {
+      "key": "to",
+      "value": "1800"
+    },
+    {
+      "key": "catalog_place",
+      "value": "United States, Alabama, Jackson"
+    },
+    {
+      "key": "keywords",
+      "value": "minutes"
+    },
+    {
+      "key": "image_ark",
+      "value": "3:1:3Q9M-CSSC-D9XN-8"
+    },
+    {
+      "key": "apid",
+      "value": "TH-909-56082-40091-16"
+    }
+  ]
+}
